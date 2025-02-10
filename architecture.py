@@ -1,8 +1,9 @@
 import capture
 import cleaner_tcpdump
 import statmaker
-import csvmaker
-
+import numpy_populator
+import goodneural
+import cleaner_tshark
 
 def main():
     print("\n\n Welcome to Faria's version of Wireshark \n\n")
@@ -13,7 +14,7 @@ def main():
         print("1. Start the capture process")
         print("2. Clean the tcpdump output")
         print("3. Display packet statistics")
-        print("4. Parse packets into a CSV file")
+        print("4. Run the neural network")
         print("Q. Quit the program")
 
         # Get the user’s choice
@@ -23,21 +24,20 @@ def main():
         if choice == '1':
             capture.main()
         elif choice == '2':
-            cleaner_tcpdump.main()
+            cleaner_tshark.main()
         elif choice == '3':
-            statmaker.analyze_packets_from_file("cleaned_foobar.txt")
+            print("SORRYYY")
+            
         elif choice == '4':
-            csvmaker.parse_packets("cleaned_foobar.txt", "foobar_csv.csv")
+            cleaner_tcpdump.main()
+            numpy_populator.preprocessor_main(128, cleaner_tcpdump.mega_cleaned_file_list, cleaner_tcpdump.X_test_file_list, cleaner_tcpdump.Y_test_file_list)
+            goodneural.main()
+
         elif choice == 'q':
             print("Exiting the program.")
             break
         else:
             print("Invalid input. Please select a valid option (1/2/3/4/Q).")
 
-# if __name__ == "__main__":
-#     main()
-
-
-# preprocessor_main(128,cleaned_file_list,X_test_file_list,Y_test_file_list)
-
-
+if __name__ == "__main__":
+    main()
