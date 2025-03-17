@@ -14,9 +14,10 @@ from mypredictions import *
 import matplotlib.pyplot as plt
 #import matplotlib.image.AxesImage
 from datetime import datetime
+import cleaner_tcpdump
 import os.path
 
-ERROR = 1e-10
+ERROR = 1e-5
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
     #print("In net model mlp main.")
@@ -173,9 +174,9 @@ def optimizer_pick(choice,net_model,alpha):
 
 
 def main():
-    features = 128
+    features = 86
     iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-3
+    alpha = 1e-6
     hidden_nodes = 28
     classes = 4  #only 4 for now 
     batch_size = 128
@@ -184,12 +185,15 @@ def main():
    
     X_train = torch.randn(1000, features)  # Example training data with 128 features
     Y_labels = torch.randint(0, classes, (1000,))  # Example labels (0 to 3 for 4 classes)
-    X_test_file_list = ["numpyy/icmp_features.npy"]  # Replace with actual file paths 
+    # X_test_file_list = ["numpyy/icmp_features.npy"]  # Replace with actual file paths 
 
-    Y_test_file_list = ["numpyy/icmp_labels.npy"]  # Replace with actual file paths
+    # Y_test_file_list = ["numpyy/icmp_labels.npy"]  # Replace with actual file paths
 
+    X_test_file_list = [cleaner_tcpdump.X_feature_file_list[2]]
+    Y_test_file_list = [cleaner_tcpdump.Y_label_file_list[2]]
+ 
     # Call the function with these parameters
-    gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list, 
+    gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list,
                     num_features=features, iterations=iterations, hidden_nodes=hidden_nodes, 
                     classes=classes, alpha=alpha, batch_size=batch_size)
 
