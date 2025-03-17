@@ -48,16 +48,17 @@ def main():
     print("AAAAAAAAA ", capture.capture_file_list)
    
     cleaned_dataset_dir="cleaned_datasets/"
-    numpy_dir="numpy/"
+    numpy_dir="numpyy/"
 
     if not os.path.exists(cleaned_dataset_dir):
         os.makedirs(cleaned_dataset_dir)
 
-    if not os.path.exists(numpy_dir):
+    if not os.path.exists(numpy_dir): 
         os.makedirs(numpy_dir)
 
     for i in range(raw_file_list_len):
-        original_capture_file= capture.capture_file_list[i]
+        original_capture_file1= capture.capture_file_list[i]
+        original_capture_file = original_capture_file1.split("/")[1]
         cleaned_file_name = cleaned_dataset_dir + original_capture_file.split(".")[0] + "_cleaned.txt"
         x_features_file_name = numpy_dir + original_capture_file.split(".")[0] + "_features.npy"
         y_label_file_name = numpy_dir + original_capture_file.split(".")[0] + "_labels.npy"
@@ -82,5 +83,5 @@ def main():
             Y_test_file_list.append(y_label_file_name)
             print(f"Empty file created: {y_label_file_name}")
             
-        parse_packet_file(original_capture_file, cleaned_file_name)
+        parse_packet_file(original_capture_file1, cleaned_file_name)
 

@@ -24,7 +24,7 @@ X_test_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.
 Y_test_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
 capture_file_list = [r'datasets\\arpbroadcast.txt', 
                      r'datasets\\arpRep.txt',
-                     r'datasets\\icmp.txt',]
+                     r'datasets\\icmp.txt']
 
 
 # Updated lists with both the new and commented files
@@ -118,45 +118,33 @@ def format_hex_data(hex_data):
 
 
 def main():
-    raw_file_list_len = len(capture_file_list)
+    raw_file_list_len = len(capture.capture_file_list)
     print("AAAAAAAAA ", capture_file_list)
    
-    cleaned_dataset_dir="cleaned_datasets\\"
-    mega_cleaned_dataset_dir = "megacleaned_datasets\\"
-    numpy_dir="numpy/"
+   
+    cleaned_dataset_dir="cleaned_datasets/"
+    numpy_dir="numpyy/"
 
     if not os.path.exists(cleaned_dataset_dir):
         os.makedirs(cleaned_dataset_dir)
 
-    if not os.path.exists(numpy_dir):
+    if not os.path.exists(numpy_dir): 
         os.makedirs(numpy_dir)
 
-    if not os.path.exists(mega_cleaned_dataset_dir):
-        os.makedirs(mega_cleaned_dataset_dir)
-
     for i in range(raw_file_list_len):
-        original_capture_file1= capture_file_list[i]
-        print("BOOOO ", original_capture_file1)
-        original_capture_file = original_capture_file1.split('\\')[2]           #getting just the filename
-    
+        original_capture_file1= capture.capture_file_list[i]
+        original_capture_file = original_capture_file1.split("/")[1]      #just get the filename, not the relative path
         cleaned_file_name = cleaned_dataset_dir + original_capture_file.split(".")[0] + "_cleaned.txt"
-        mega_cleaned_file_name = mega_cleaned_dataset_dir + original_capture_file.split(".")[0] + "mega_cleaned.txt"
         x_features_file_name = numpy_dir + original_capture_file.split(".")[0] + "_features.npy"
         y_label_file_name = numpy_dir + original_capture_file.split(".")[0] + "_labels.npy"
-        print(mega_cleaned_file_name)
+        print(cleaned_file_name)
 
-        if not os.path.exists(mega_cleaned_file_name):
+        if not os.path.exists(cleaned_file_name):
         #make the clean file 
             with open(cleaned_file_name, 'w') as file:
                 pass  # just Create the file 
             cleaned_file_list.append(cleaned_file_name)
             print(f"Empty file created: {cleaned_file_name}")
-
-        #make the megaclean file 
-            with open(mega_cleaned_file_name, 'w') as file:
-                pass  # just Create the file 
-            mega_cleaned_file_list.append(mega_cleaned_file_name)
-            print(f"Empty file created: {mega_cleaned_file_name}")
 
         #make the numpy X features files 
             with open(x_features_file_name, 'w') as file:
@@ -169,13 +157,11 @@ def main():
                 pass  # Create the file without writing any content
             Y_test_file_list.append(y_label_file_name)
             print(f"Empty file created: {y_label_file_name}")
+            
+        process_tcpdump_output(original_capture_file1, cleaned_file_name)    #make sure you feed the relative path in here
 
 
-        original_capture_file1 = original_capture_file1.replace('Networking-Research-Hub\\', '')
-        print("JJJJJJJJ", cleaned_file_name)
-        #process_tcpdump_output(original_capture_file1, cleaned_file_name)      #this one for tcpdump captures only
-        cleaner_tshark.parse_packet_file(original_capture_file1, cleaned_file_name)
-        statmaker.analyze_packets_from_file(cleaned_file_name, mega_cleaned_file_name)   #this puts the only 4 classes in the mega cleaned file
+       
 
       
 

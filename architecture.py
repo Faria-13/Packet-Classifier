@@ -1,9 +1,11 @@
 import capture
 import cleaner_tcpdump
 import statmaker
+import linux_cleaner_tcpdump
 import numpy_populator
 import goodneural
 import cleaner_tshark
+import newstatmaker
 
 def main():
     print("\n\n Welcome to Faria's version of Wireshark \n\n")
@@ -24,13 +26,13 @@ def main():
         if choice == '1':
             capture.main()
         elif choice == '2':
-            cleaner_tshark.main()
+            cleaner_tcpdump.main()
         elif choice == '3':
-            print("SORRYYY")
+            newstatmaker.main()
             
         elif choice == '4':
-            cleaner_tcpdump.main()
-            numpy_populator.preprocessor_main(128, cleaner_tcpdump.mega_cleaned_file_list, cleaner_tcpdump.X_test_file_list, cleaner_tcpdump.Y_test_file_list)
+            linux_cleaner_tcpdump.main()
+            numpy_populator.preprocessor_main(128, linux_cleaner_tcpdump.mega_cleaned_file_list, linux_cleaner_tcpdump.X_test_file_list, linux_cleaner_tcpdump.Y_test_file_list)
             goodneural.main()
 
         elif choice == 'q':

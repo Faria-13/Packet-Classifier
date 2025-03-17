@@ -184,9 +184,9 @@ def main():
    
     X_train = torch.randn(1000, features)  # Example training data with 128 features
     Y_labels = torch.randint(0, classes, (1000,))  # Example labels (0 to 3 for 4 classes)
-    X_test_file_list = ["numpyy\\dataset1_features.npy"]  # Replace with actual file paths 
+    X_test_file_list = ["numpyy/icmp_features.npy"]  # Replace with actual file paths 
 
-    Y_test_file_list = ["numpyy\\dataset1_labels.npy"]  # Replace with actual file paths
+    Y_test_file_list = ["numpyy/icmp_labels.npy"]  # Replace with actual file paths
 
     # Call the function with these parameters
     gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list, 
