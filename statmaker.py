@@ -20,46 +20,41 @@ def extract_packet_info(packet_hex):
 
     return protocol, total_length
 
-def classifier(hex_string):
-    # Extract the EtherType field (bytes 12-13 in the Ethernet header, hex positions 24-27)
-    ether_type_hex = hex_string[24:28]
+def classifier(packet_hex):
+    ether_type_hex = packet_hex[24:28]
     ether_type_int = int(ether_type_hex, 16)
-
-    # Check for ICMP (0x0800) or ARP (0x0806)
-    if ether_type_int == 0x0800:  # IPv4
-        # Check the protocol field (hex positions 46-47)
-        protocol_hex = hex_string[46:48]
-        protocol = int(protocol_hex, 16)
-        
-        if protocol == 1:  # ICMP
-            # Check the ICMP type field (byte 34 in the ICMP header, hex positions 68-69)
-            icmp_type_hex = hex_string[68:70]
-            icmp_type = int(icmp_type_hex, 16)
-            
-            if icmp_type == 0:
-                #print("ICMP Reply")
-                return "ICMP Reply"
-            elif icmp_type == 8:
-                #print("ICMP Req")
-                return "ICMP Request"
-            else:
-                return "ICMP Other"
-        else:
-            return "Not an ICMP packet"
     
-    elif ether_type_int == 0x0806:  # ARP
-        # Check the ARP opcode (bytes 20-21 in the ARP header, hex positions 40-43)
-        arp_opcode_hex = hex_string[40:44]
-        arp_opcode = int(arp_opcode_hex, 16)
+    if ether_type_int == 0x0800:  # IPv4
+        protocol_hex = packet_hex[46:48]
+        protocol = int(protocol_hex, 16)
+
+        src_port_hex = packet_hex[68:72]
+        dst_port_hex = packet_hex[72:76]
+        src_port = int(src_port_hex, 16)
+        dst_port = int(dst_port_hex, 16)
         
-        if arp_opcode == 1:
-            #print("ARP Request")
-            return "ARP Request"
-        elif arp_opcode == 2:
-            #print("ARP Reply")
-            return "ARP Reply"
-        else:
-            return "ARP Other"
+        if protocol == 1:
+            icmp_type_hex = packet_hex[68:70]
+            icmp_type = int(icmp_type_hex, 16)
+            return "ICMP Reply" if icmp_type == 0 else "ICMP Request" if icmp_type == 8 else "ICMP Other"
+        
+        elif protocol == 17:
+            if dst_port == 443 or src_port == 443:
+                return "QUIC"
+            elif dst_port == 53 or src_port == 53:
+                return "DNS"
+        
+        elif protocol == 6:   # TCP or UDP 
+            if dst_port == 443 or src_port == 443:
+                return "TLS"
+            elif dst_port in [80, 8080] or src_port in [80, 8080]:
+                return "HTTP"
+            
+        
+    elif ether_type_int == 0x0806:
+        arp_opcode_hex = packet_hex[40:44]
+        arp_opcode = int(arp_opcode_hex, 16)
+        return "ARP Request" if arp_opcode == 1 else "ARP Reply" if arp_opcode == 2 else "ARP Other"
     
     return "Unknown Packet Type"
 
@@ -83,7 +78,11 @@ def analyze_packets_from_file(filename, selected_packet_file):
     "ICMP Reply": 0,
     "ICMP Request": 0,
     "ARP Request": 0,
-    "ARP Reply": 0
+    "ARP Reply": 0,
+    "TLS":0,
+    "QUIC":0,
+    "DNS":0,
+    "HTTP":0
     }
 
     #selected_packet_file = "megacleanfoobar.txt"
