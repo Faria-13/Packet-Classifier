@@ -58,7 +58,7 @@ def classifier(packet_hex):
     
     return "Unknown Packet Type"
 
-def format_packet_hex(packet_hex, length=128):
+def format_packet_hex(packet_hex, length=100):
     
     if len(packet_hex) > length:
         return packet_hex[:length]

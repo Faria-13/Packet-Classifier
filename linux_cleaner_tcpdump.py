@@ -4,14 +4,22 @@ import numpy_populator
 import cleaner_tshark
 import statmaker
 import goodneural
+import shutil
 
 cleaned_file_list = []
-mega_cleaned_file_list = ['megacleaned_datasets/arpRepmega_cleaned.txt',
-                          'megacleaned_datasets/arpbroadcastmega_cleaned.txt',
-                          'megacleaned_datasets/icmpmega_cleaned.txt']
-X_test_file_list = ['numpyy/arpRep_features.npy' ,'numpyy/arpbroadcast_features.npy', 'numpyy/icmp_features.npy' ]
-Y_test_file_list = ['numpyy/arpRep_labels.npy','numpyy/arpbroadcast_labels.npy', 'numpyy/icmp_labels.npy']
+# mega_cleaned_file_list = ['megacleaned_datasets/arpRepmega_cleaned.txt',
+#                           'megacleaned_datasets/arpbroadcastmega_cleaned.txt',
+#                           'megacleaned_datasets/icmpmega_cleaned.txt']
+mega_cleaned_file_list = []
+# X_test_file_list = ['numpyy/arpRep_features.npy' ,'numpyy/arpbroadcast_features.npy', 'numpyy/icmp_features.npy' ]
+# Y_test_file_list = ['numpyy/arpRep_labels.npy','numpyy/arpbroadcast_labels.npy', 'numpyy/icmp_labels.npy']
+X_test_file_list = []
+Y_test_file_list = []
+X_feature_file_list = []
+Y_label_file_list = []
 
+# X_feature_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.npy', 'numpy\\icmp_features.npy']
+# Y_label_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
 
 capture_file_list = [r'datasets/arpRep.txt', r'datasets/arpbroadcast.txt',
                      r'datasets/icmp.txt']
@@ -61,8 +69,24 @@ def format_hex_data(hex_data):
     # Return the hex data as a continuous string
     return hex_data.lower()
 
+def file_eraser():
+    directories = ["numpyy", "megacleaned_datasets"]
+
+# Check if the directory exists
+    for directory in directories:
+        if os.path.exists(directory):
+            # Remove all files
+            for file in os.listdir(directory):
+                file_path = os.path.join(directory, file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)  # Delete the file
+            print("All files deleted from", directory)
+        else:
+            print("Directory does not exist")
+
 
 def main():
+    file_eraser()
     raw_file_list_len = len(capture_file_list)
     print("AAAAAAAAA ", capture_file_list)
    
@@ -107,12 +131,14 @@ def main():
             with open(x_features_file_name, 'w') as file:
                 pass  
             X_test_file_list.append(x_features_file_name)
+            X_feature_file_list.append(x_features_file_name)
             print(f"Empty file created: {x_features_file_name}")
 
             # Make the numpy Y labels file
             with open(y_label_file_name, 'w') as file:
                 pass  # Create the file without writing any content
             Y_test_file_list.append(y_label_file_name)
+            Y_label_file_list.append(y_label_file_name)
             print(f"Empty file created: {y_label_file_name}")
 
         original_capture_file1 = original_capture_file1.replace('Networking-Research-Hub/', '')  # For Linux file paths

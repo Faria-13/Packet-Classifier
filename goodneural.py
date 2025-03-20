@@ -15,12 +15,12 @@ import matplotlib.pyplot as plt
 #import matplotlib.image.AxesImage
 from datetime import datetime
 import cleaner_tcpdump
+import linux_cleaner_tcpdump
 import os.path
 
 ERROR = 1e-5
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
-    
 
     batch_size=batch_size
     D_in=num_features
@@ -35,6 +35,8 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     max_iter=20
     train=data_utils.TensorDataset(X_train, Y_labels)
     train_loader=data_utils.DataLoader(train, batch_size=batch_size,shuffle=False)
+
+    
 
     net_model=torch.nn.Sequential(
     torch.nn.Linear(D_in, H1),
@@ -108,21 +110,10 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     print()
     print("Done with general training. Total time:",delta_time)
 
-    #print(tick)
-    #print(tock)
+
     print()
     print("Starting to test datasets.")
-    #plt.figure()
-    #plt.ion()
-    #plt.plot(loss_array)
-    #plt.ylabel('cost')
-    #plt.xlabel('iterations (per hundreds)')
-    #plt.title("General Loss")
-    #plt.savefig('gen.png')
-    #plt.show()
-    tcp_packet_list_list=[]
-    #print(len(X_test_file_list))
-    #runs=len(X_test_file_list)
+
     for l in range(len(X_test_file_list)):
         X_test=X_test_file_list[l]
         Y_test=Y_test_file_list[l]
@@ -170,7 +161,7 @@ def optimizer_pick(choice,net_model,alpha):
 def main():
     features = 86
     iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-6
+    alpha = 1e-7
     hidden_nodes = 28
     classes = 4  #only 4 for now 
     batch_size = 128
@@ -180,9 +171,9 @@ def main():
     X_train = torch.randn(1000, features)  # Example training data with 128 features
     Y_labels = torch.randint(0, classes, (1000,))  # Example labels (0 to 3 for 4 classes)
    
-
-    X_test_file_list = [cleaner_tcpdump.X_feature_file_list[2]]
-    Y_test_file_list = [cleaner_tcpdump.Y_label_file_list[2]]
+    
+    X_test_file_list = [linux_cleaner_tcpdump.X_feature_file_list[2]]
+    Y_test_file_list = [linux_cleaner_tcpdump.Y_label_file_list[2]]
  
     # Call the function with these parameters
     gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list,

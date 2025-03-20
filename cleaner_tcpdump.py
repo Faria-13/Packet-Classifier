@@ -20,8 +20,10 @@ cleaned_file_list = []
 mega_cleaned_file_list = [r'megacleaned_datasets\arpbroadcastmega_cleaned.txt', 
                      r'megacleaned_datasets\arpRepmega_cleaned.txt',
                      r'megacleaned_datasets\icmpmega_cleaned.txt']
-X_feature_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.npy', 'numpy\\icmp_features.npy']
-Y_label_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
+# X_feature_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.npy', 'numpy\\icmp_features.npy']
+# Y_label_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
+X_feature_file_list = []
+Y_label_file_list = []
 capture_file_list = [r'datasets\\arpbroadcast.txt', 
                      r'datasets\\arpRep.txt',
                      r'datasets\\icmp.txt']
