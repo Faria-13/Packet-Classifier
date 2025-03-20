@@ -98,7 +98,7 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
     return Y
     
 
-def preprocessor_main(features,cleaned_file_list,X_test_file_list,Y_test_file_list):
+def preprocessor_main(features,cleaned_file_list,X_feature_file_list,Y_label_file_list):
 
     X_rows=0
     Y_rows=0
@@ -108,8 +108,8 @@ def preprocessor_main(features,cleaned_file_list,X_test_file_list,Y_test_file_li
 
     for i in range(len(cleaned_file_list)):   #actually mega cleaned file list cuz thats what gets passed
         X_source_file=cleaned_file_list[i]
-        X_features_file=X_test_file_list[i]
-        Y_labels_file=Y_test_file_list[i]
+        X_features_file=X_feature_file_list[i]
+        Y_labels_file=Y_label_file_list[i]
 
         print()
         print("Input file             :",X_source_file)

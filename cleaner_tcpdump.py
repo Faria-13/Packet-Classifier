@@ -20,8 +20,8 @@ cleaned_file_list = []
 mega_cleaned_file_list = [r'megacleaned_datasets\arpbroadcastmega_cleaned.txt', 
                      r'megacleaned_datasets\arpRepmega_cleaned.txt',
                      r'megacleaned_datasets\icmpmega_cleaned.txt']
-X_test_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.npy', 'numpy\\icmp_features.npy']
-Y_test_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
+X_feature_file_list = ['numpy\\arpbroadcast_features.npy', 'numpy\\arpRep_features.npy', 'numpy\\icmp_features.npy']
+Y_label_file_list = ['numpy\\arpbroadcast_labels.npy', 'numpy\\arpRep_labels.npy', 'numpy\\icmp_labels.npy']
 capture_file_list = [r'datasets\\arpbroadcast.txt', 
                      r'datasets\\arpRep.txt',
                      r'datasets\\icmp.txt']
@@ -149,13 +149,13 @@ def main():
         #make the numpy X features files 
             with open(x_features_file_name, 'w') as file:
                 pass  
-            X_test_file_list.append(x_features_file_name)
+            X_feature_file_list.append(x_features_file_name)
             print(f"Empty file created: {x_features_file_name}")
 
         #make the numpy Y labels file 
             with open(y_label_file_name, 'w') as file:
                 pass  # Create the file without writing any content
-            Y_test_file_list.append(y_label_file_name)
+            Y_label_file_list.append(y_label_file_name)
             print(f"Empty file created: {y_label_file_name}")
             
         process_tcpdump_output(original_capture_file1, cleaned_file_name)    #make sure you feed the relative path in here

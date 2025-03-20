@@ -16,11 +16,12 @@ def main():
         print("1. Start the capture process")
         print("2. Clean the tcpdump output")
         print("3. Display packet statistics")
-        print("4. Run the neural network")
+        print("4. Run the neural network on a linux machine")
+        print("5. Run the neural network on a Windows machine")
         print("Q. Quit the program")
 
         # Get the user’s choice
-        choice = input("Enter your choice (1/2/3/4/Q): ").strip().lower()
+        choice = input("Enter your choice (1/2/3/4/5/Q): ").strip().lower()
 
         # Execute corresponding functions based on user input
         if choice == '1':
@@ -33,6 +34,11 @@ def main():
         elif choice == '4':
             linux_cleaner_tcpdump.main()
             numpy_populator.preprocessor_main(128, linux_cleaner_tcpdump.mega_cleaned_file_list, linux_cleaner_tcpdump.X_test_file_list, linux_cleaner_tcpdump.Y_test_file_list)
+            goodneural.main()
+        
+        elif choice == '5':
+            cleaner_tcpdump.main()
+            numpy_populator.preprocessor_main(86, cleaner_tcpdump.mega_cleaned_file_list, cleaner_tcpdump.X_feature_file_list, cleaner_tcpdump.Y_label_file_list)
             goodneural.main()
 
         elif choice == 'q':
