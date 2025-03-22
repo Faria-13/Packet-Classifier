@@ -21,7 +21,7 @@ def main():
         print("Q. Quit the program")
 
         # Get the user’s choice
-        choice = input("Enter your choice (1/2/3/4/5/5Q): ").strip().lower()
+        choice = input("Enter your choice (1/2/3/4/5/Q): ").strip().lower()
 
         # Execute corresponding functions based on user input
         if choice == '1':
