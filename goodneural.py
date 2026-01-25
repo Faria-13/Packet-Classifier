@@ -19,7 +19,6 @@ import os.path
 ERROR = 1e-3
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
-    
 
     batch_size=batch_size
     D_in=num_features
@@ -34,6 +33,8 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     max_iter=20
     train=data_utils.TensorDataset(X_train, Y_labels)
     train_loader=data_utils.DataLoader(train, batch_size=batch_size,shuffle=False)
+
+    
 
     net_model=torch.nn.Sequential(
     torch.nn.Linear(D_in, H1),
@@ -104,21 +105,10 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     print()
     print("Done with general training. Total time:",delta_time)
 
-    #print(tick)
-    #print(tock)
+
     print()
     print("Starting to test datasets.")
-    #plt.figure()
-    #plt.ion()
-    #plt.plot(loss_array)
-    #plt.ylabel('cost')
-    #plt.xlabel('iterations (per hundreds)')
-    #plt.title("General Loss")
-    #plt.savefig('gen.png')
-    #plt.show()
-    tcp_packet_list_list=[]
-    #print(len(X_test_file_list))
-    #runs=len(X_test_file_list)
+
     for l in range(len(X_test_file_list)):
         X_test=X_test_file_list[l]
         Y_test=Y_test_file_list[l]
@@ -166,7 +156,7 @@ def optimizer_pick(choice,net_model,alpha):
 def main():
     features = 128
     iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-6
+    alpha = 1e-7
     hidden_nodes = 28
     classes = 4  #only 4 for now 
     batch_size = 128

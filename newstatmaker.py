@@ -94,7 +94,9 @@ def main():
     dataset_dir = "cleaned_datasets"
     # os.makedirs(dataset_dir, exist_ok=True)
 
-    
+    if len(capture.capture_file_list) == 0:
+        print(" No traffic to show stats for. Capture traffic first")
+        
     for filename in capture.capture_file_list:    #read off the capture files only 
         print("AAAAAAAAAA", filename)
         filename = filename.split('/')[1] 

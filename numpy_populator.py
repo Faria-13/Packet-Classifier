@@ -31,14 +31,14 @@ def numpy_X_Y(X_rows, X_cols, X_outfile, Y_rows, Y_cols):
     Y=np.zeros((Y_rows,Y_cols))
     i=0
     print("numpy_X_Y shapes:",X.shape, Y.shape)
-
+    print ("X COLS", X_cols)
     with open(X_outfile) as traffic:
         for line in traffic:
             count +=1
             for j in range(X_cols):
-                #print("LINE = ", count)
                 
-                X[j][i]=int(line[j],16)  #This is a problem with odd nos. due to '/n'
+                line = line.strip()
+                X[j][i]=int(line[j-1],16)  #This is a problem with odd nos. due to '/n'
             i=i+1
     #X=X/16           #Normalizes X
     #print(X[:,0])

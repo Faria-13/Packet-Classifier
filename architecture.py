@@ -7,6 +7,7 @@ import goodneural
 import cleaner_tshark
 import newstatmaker
 
+
 def main():
     print("\n\n Welcome to Faria's version of Wireshark \n\n")
     
@@ -33,11 +34,12 @@ def main():
             
         elif choice == '4':
             linux_cleaner_tcpdump.main()
-            numpy_populator.preprocessor_main(128, linux_cleaner_tcpdump.mega_cleaned_file_list, linux_cleaner_tcpdump.X_test_file_list, linux_cleaner_tcpdump.Y_test_file_list)
+            numpy_populator.preprocessor_main(86, linux_cleaner_tcpdump.mega_cleaned_file_list, linux_cleaner_tcpdump.X_test_file_list, linux_cleaner_tcpdump.Y_test_file_list)
             goodneural.main()
         
         elif choice == '5':
             cleaner_tcpdump.main()
+            
             numpy_populator.preprocessor_main(86, cleaner_tcpdump.mega_cleaned_file_list, cleaner_tcpdump.X_feature_file_list, cleaner_tcpdump.Y_label_file_list)
             goodneural.main()
 
