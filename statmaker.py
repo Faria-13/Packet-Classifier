@@ -1,4 +1,15 @@
 from collections import defaultdict
+import os
+
+DATASET_DIR = "datasets/"
+
+packet_file_list = [
+    os.path.join(DATASET_DIR, f)
+    for f in os.listdir(DATASET_DIR)
+    if f.endswith(".txt")
+]
+
+
 
 def extract_packet_info(packet_hex):
     
@@ -27,6 +38,7 @@ def classifier(packet_hex):
     if ether_type_int == 0x0800:  # IPv4
         protocol_hex = packet_hex[46:48]
         protocol = int(protocol_hex, 16)
+        llc = packet_hex[28:34]    #for stp
 
         src_port_hex = packet_hex[68:72]
         dst_port_hex = packet_hex[72:76]
@@ -38,13 +50,13 @@ def classifier(packet_hex):
             icmp_type = int(icmp_type_hex, 16)
             return "ICMP Reply" if icmp_type == 0 else "ICMP Request" if icmp_type == 8 else "ICMP Other"
         
-        elif protocol == 17:
+        elif protocol == 17:        # UDP
             if dst_port == 443 or src_port == 443:
                 return "QUIC"
             elif dst_port == 53 or src_port == 53:
                 return "DNS"
         
-        elif protocol == 6:   # TCP or UDP 
+        elif protocol == 6:   # TCP 
             if dst_port == 443 or src_port == 443:
                 return "TLS"
             elif dst_port in [80, 8080] or src_port in [80, 8080]:

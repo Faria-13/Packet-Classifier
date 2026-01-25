@@ -112,8 +112,8 @@ def main():
 
 main()
 
-numpy_populator.preprocessor_main(128)
-goodneural.main()
+# numpy_populator.preprocessor_main(128)
+# goodneural.main()
 
 
  

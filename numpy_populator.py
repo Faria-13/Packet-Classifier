@@ -10,7 +10,7 @@ import numpy as np
 from datetime import datetime
 import time
 import os
-import statmaker
+import statmaker2
 
 numpy_dir="numpy"
 cleaned_dir="cleaned_datasets"
@@ -58,10 +58,11 @@ def mean_normalize(X, features):
 
 
 def fields_and_labels(X_outfile, Y, num_classes=4):
-    icmp_req_ctr = 0
-    icmp_reply_ctr = 0
-    arp_req_ctr = 0
-    arp_reply_ctr = 0
+    icmp_ctr = 0
+    arp_ctr = 0
+    tcp_ctr = 0
+    udp_ctr = 0
+    stp_ctr = 0
     ctr = 0
 
 
@@ -71,30 +72,36 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
 
     for i in range(len(lines)):
         packet_hex = lines[i].strip()  # Hex data
-        classic = statmaker.classifier(packet_hex)  # Get the packet class
+        classic = statmaker2.classifier(packet_hex)  # Get the packet class
 
         # Assign class based on classifier result
-        if classic == 'ICMP Request':
+        if classic == 'ICMP':
             traffic_class_int = 0
-            icmp_req_ctr += 1
-        elif classic == 'ICMP Reply':
+            icmp_ctr += 1
+        elif classic == 'TCP':
             traffic_class_int = 1
-            icmp_reply_ctr += 1
-        elif classic == 'ARP Request':
+            tcp_ctr += 1
+        elif classic == 'ARP':
             traffic_class_int = 2
-            arp_req_ctr += 1
-        elif classic == 'ARP Reply':
+            arp_ctr += 1
+        elif classic == 'UDP':
             traffic_class_int = 3
-            arp_reply_ctr += 1
+            udp_ctr += 1
+
+        elif classic == 'STP':
+            traffic_class_int = 4
+            stp_ctr += 1        
         else:
             continue  # Skip unknown classes
 
 
         
         Y[ctr]=int(traffic_class_int)   #making into integer                  #Places the value of the ground truth into the proper Y index
-        ctr=ctr+1
+        ctr=ctr+1  #Overall ctr
 
-    print("Some label counters:", icmp_req_ctr, icmp_reply_ctr, arp_req_ctr, arp_reply_ctr)
+    print("Some label counters:", icmp_ctr, tcp_ctr, arp_ctr, udp_ctr, stp_ctr)
+
+    print ("Y shape after labelling:", Y.shape)
     # return Y_one_hot
     return Y
     
