@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os.path
 
-ERROR = 1e-3
+ERROR = 1e-5
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
 
@@ -156,7 +156,7 @@ def optimizer_pick(choice,net_model,alpha):
 def main():
     features = 128
     iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-7
+    alpha = 1e-3
     hidden_nodes = 28
     classes = 4  #only 4 for now 
     batch_size = 128
