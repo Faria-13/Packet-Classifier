@@ -14,10 +14,9 @@ from mypredictions import *
 import matplotlib.pyplot as plt
 #import matplotlib.image.AxesImage
 from datetime import datetime
-import cleaner_tcpdump
 import os.path
 
-ERROR = 1e-5
+ERROR = 1e-3
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
     
@@ -74,11 +73,8 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
         for i, data in enumerate(train_loader,1):
             inputs, targets = data
             inputs=inputs.float()
-              
-
+            
             # y_pred=net_model((inputs).float())
-
-        
             # loss=loss_fn(y_pred, targets.float())
 
             y_pred = net_model(inputs)
@@ -168,21 +164,45 @@ def optimizer_pick(choice,net_model,alpha):
 
 
 def main():
-    features = 86
+    features = 128
     iterations = 500  # At 401, the general accuracy is above 99.9%
     alpha = 1e-6
     hidden_nodes = 28
     classes = 4  #only 4 for now 
     batch_size = 128
-    num_data_files = 3
+    
 
    
     X_train = torch.randn(1000, features)  # Example training data with 128 features
     Y_labels = torch.randint(0, classes, (1000,))  # Example labels (0 to 3 for 4 classes)
    
 
-    X_test_file_list = [cleaner_tcpdump.X_feature_file_list[2]]
-    Y_test_file_list = [cleaner_tcpdump.Y_label_file_list[2]]
+    #testing datasets 
+
+    NUMPY_DIR = "numpy"
+
+    feature_files = sorted(
+    f for f in os.listdir(NUMPY_DIR)
+    if f.endswith("_features.npy")
+    )
+
+    X_test_file_list = []
+    Y_test_file_list = []
+
+    for feat in feature_files:
+        base = feat.replace("_features.npy", "")
+        label_file = f"{base}_labels.npy"
+
+        label_path = os.path.join(NUMPY_DIR, label_file)
+        feat_path = os.path.join(NUMPY_DIR, feat)
+
+        if not os.path.exists(label_path):
+            print(f"[!] Skipping {base}: label file missing")
+            continue
+
+        X_test_file_list.append(feat_path)
+        Y_test_file_list.append(label_path)
+
  
     # Call the function with these parameters
     gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list,
@@ -190,4 +210,4 @@ def main():
                     classes=classes, alpha=alpha, batch_size=batch_size)
 
 
-# main()
+#main()

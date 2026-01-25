@@ -12,6 +12,8 @@ import time
 import os
 import statmaker
 
+numpy_dir="numpy"
+cleaned_dir="cleaned_datasets"
 
 
 def num_rows(X_outfile):
@@ -89,7 +91,6 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
 
 
         
-        traffic_class_int=str(traffic_class_int)
         Y[ctr]=int(traffic_class_int)   #making into integer                  #Places the value of the ground truth into the proper Y index
         ctr=ctr+1
 
@@ -98,45 +99,51 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
     return Y
     
 
-def preprocessor_main(features,cleaned_file_list,X_feature_file_list,Y_label_file_list):
+def preprocessor_main(features):
 
-    X_rows=0
-    Y_rows=0
-    Y_cols=1
-    X_cols=features
-   
+    os.makedirs(numpy_dir, exist_ok=True)
 
-    for i in range(len(cleaned_file_list)):   #actually mega cleaned file list cuz thats what gets passed
-        X_source_file=cleaned_file_list[i]
-        X_features_file=X_feature_file_list[i]
-        Y_labels_file=Y_label_file_list[i]
+    X_cols = features
+    Y_cols = 1
 
-        print()
-        print("Input file             :",X_source_file)
-        print("Normalized feature file:",X_features_file)
-        print("Output label file      :",Y_labels_file)
-        print()
+    cleaned_files = sorted(
+        os.path.join(cleaned_dir, f)
+        for f in os.listdir(cleaned_dir)
+        if f.endswith("_cleaned.txt")
+    )
 
-        #print("Calling num_rows")
-        X_rows, Y_rows=num_rows(X_source_file)              #Used to help build numpy arrays
+    for X_source_file in cleaned_files:
+        base = os.path.splitext(os.path.basename(X_source_file))[0]
+        base = base.replace("_cleaned", "")
 
-        #print("Calling numpy_X_Y")
-        X,Y=numpy_X_Y(X_rows, X_cols, X_source_file, Y_rows, Y_cols)
+        X_features_file = os.path.join(
+            numpy_dir, f"{base}_features.npy"
+        )
+        Y_labels_file = os.path.join(
+            numpy_dir, f"{base}_labels.npy"
+        )
 
-        #print("Calling mean_normalized")
-        X_normalized=mean_normalize(X, features)    #Currently not called for CNN    6-4-19 
+        print("\nInput file             :", X_source_file)
+        print("Normalized feature file:", X_features_file)
+        print("Output label file      :", Y_labels_file)
 
-        # if "w" in X_source_file:
-        #     print("Calling wireshark fields and labels for:", X_source_file)
-        #     Y=fields_and_labels(X_source_file, Y) #Processes source data to establish ground truth values.
+        X_rows, Y_rows = num_rows(X_source_file)
 
-        # else:
-        #     print("Unknown file type.")
-
+        X, Y = numpy_X_Y(X_rows, X_cols, X_source_file, Y_rows, Y_cols)
+        X_normalized = mean_normalize(X, features)
         Y = fields_and_labels(X_source_file, Y)
-            
-        np.save(Y_labels_file,Y)
-        np.save(X_features_file,X_normalized)
+
+        #so that the y labels match the length of predictions
+        Y = Y.squeeze()   # (N,1) → (N,)
+
+
+        np.save(X_features_file, X_normalized)
+        np.save(Y_labels_file, Y)
+
+    print("NumPy preprocessing complete")
+
+
+#preprocessor_main(128)
 
 
 

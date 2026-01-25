@@ -62,7 +62,9 @@ def format_hex_data(hex_data):
     return hex_data.lower()
 
 
+
 def main():
+
     raw_file_list_len = len(capture_file_list)
     print("AAAAAAAAA ", capture_file_list)
    

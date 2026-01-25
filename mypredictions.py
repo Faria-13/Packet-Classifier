@@ -43,32 +43,16 @@ def packet_choice(predictions):
     print("Other packets :", no_match_ctr)
 
 
-# def accuracy(predictions, Y_test):
-#     # # Get predicted labels using argmax
-#     # predictions = predictions.argmax(dim=1).cpu().numpy()
-#     # Y_test = Y_test.cpu().numpy().flatten()  # Ensure Y_test is a 1D array
-
-#     accuracy_ctr = 0
-#     total = len(predictions)
-
-#     for i in range(total):
-#         print("Predictions: ", predictions[i])
-#         print("Y test: ", Y_test[i])
-#         if predictions[i] == Y_test[i]:
-#             accuracy_ctr += 1
-
-#     accuracy = accuracy_ctr / total
-#     print("###############################################")
-#     print("Total predictions:", total, "Correct predictions:", accuracy_ctr)
-#     print("Accuracy of predictions:", accuracy)
-#     print("###############################################")
 
 
 def accuracy(predictions, y_test):
+
+    print("First 20 predictions:", predictions[:20])
+    print("First 20 labels     :", y_test[:20])
     accuracy_count = 0
     total  = predictions.shape[0]
-    for i in range(predictions.shape[0]):
-        if int(predictions[i]) == int(y_test[0][i]):
+    for i in range(total):
+        if int(predictions[i]) == int(y_test[i]):   #changed this to be a single list
             accuracy_count += 1
 
     print("\nTotal Predictions:", total, "Accuracy Count:", accuracy_count)
