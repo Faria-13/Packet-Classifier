@@ -104,4 +104,4 @@ def classifier(packet_hex):
     return "Other"
 
 
-statmaker("cleaned_datasets/mixed_cleaned.txt") #Packet-Classifier-\cleaned_datasets\mixed_cleaned.txt
+#statmaker("cleaned_datasets/mixed_cleaned.txt") #Packet-Classifier-\cleaned_datasets\mixed_cleaned.txt

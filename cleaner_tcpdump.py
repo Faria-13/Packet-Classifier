@@ -110,10 +110,10 @@ def main():
 
       
 
-main()
+# main()
 
 # numpy_populator.preprocessor_main(128)
-# goodneural.main()
+goodneural.main()
 
 
  

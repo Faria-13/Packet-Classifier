@@ -45,7 +45,7 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     # torch.nn.Linear(H1,H2),
     # torch.nn.ReLU(),
     torch.nn.Linear(H2, D_out),       
-    torch.nn.Softmax(dim=1)
+    # torch.nn.Softmax(dim=1)
     )
     
     #
@@ -156,9 +156,9 @@ def optimizer_pick(choice,net_model,alpha):
 def main():
     features = 128
     iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-3
+    alpha = 1e-6
     hidden_nodes = 28
-    classes = 4  #only 4 for now 
+    classes = 5  #only 4 for now 
     batch_size = 128
     
 
@@ -168,6 +168,7 @@ def main():
    
 
     #testing datasets 
+    #testing with everything that I trained on
 
     NUMPY_DIR = "numpy"
 
@@ -176,22 +177,22 @@ def main():
     if f.endswith("_features.npy")
     )
 
-    X_test_file_list = []
-    Y_test_file_list = []
+    X_test_file_list = ["numpy/mixed_features.npy"]
+    Y_test_file_list = ["numpy/mixed_labels.npy"]
 
-    for feat in feature_files:
-        base = feat.replace("_features.npy", "")
-        label_file = f"{base}_labels.npy"
+    # for feat in feature_files:
+    #     base = feat.replace("_features.npy", "")
+    #     label_file = f"{base}_labels.npy"
 
-        label_path = os.path.join(NUMPY_DIR, label_file)
-        feat_path = os.path.join(NUMPY_DIR, feat)
+    #     label_path = os.path.join(NUMPY_DIR, label_file)
+    #     feat_path = os.path.join(NUMPY_DIR, feat)
 
-        if not os.path.exists(label_path):
-            print(f"[!] Skipping {base}: label file missing")
-            continue
+    #     if not os.path.exists(label_path):
+    #         print(f"[!] Skipping {base}: label file missing")
+    #         continue
 
-        X_test_file_list.append(feat_path)
-        Y_test_file_list.append(label_path)
+    #     X_test_file_list.append(feat_path)
+    #     Y_test_file_list.append(label_path)
 
  
     # Call the function with these parameters
