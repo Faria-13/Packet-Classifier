@@ -3,18 +3,14 @@ import numpy_populator
 import statmaker
 # import statmaker
 import goodneural
+import menu
 
 
 
-DATASET_DIR = "datasets"
 cleaned_dataset_dir="cleaned_datasets/"
+CLEANED_FILE_LIST=[]
 
 
-capture_file_list = [
-    os.path.join(DATASET_DIR, f)
-    for f in os.listdir(DATASET_DIR)
-    if f.endswith(".txt")
-]
 
 
 
@@ -77,9 +73,9 @@ def format_hex_data(hex_data):
     return hex_data.lower()
 
 
-def main():
-    file_list_len = len(capture_file_list)
-    print("AAAAAAAAA ", capture_file_list)
+def main(file_list):
+    file_list_len = len(file_list)
+    print("AAAAAAAAA ", file_list)
    
 
     if not os.path.exists(cleaned_dataset_dir):
@@ -88,17 +84,19 @@ def main():
 
 
     for i in range(file_list_len):
-        file1= capture_file_list[i]
+        file1= file_list[i]
         file_name_only = os.path.basename(file1)     #just get the filename, not the relative path
 
         cleaned_file_name = cleaned_dataset_dir + file_name_only.split(".")[0] + "_cleaned.txt"
         
+        CLEANED_FILE_LIST.append(cleaned_file_name)
 
         if not os.path.exists(cleaned_file_name):
         #make the clean file 
             with open(cleaned_file_name, 'w') as file:
                 pass  # just Create the file 
             print(f"Empty file created: {cleaned_file_name}")
+            
 
             
         #process_tcpdump_output(file1, cleaned_file_name)    #make sure you feed the relative path in here
@@ -113,7 +111,7 @@ def main():
 # main()
 
 # numpy_populator.preprocessor_main(128)
-goodneural.main()
+# goodneural.main()
 
 
  
