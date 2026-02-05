@@ -11,47 +11,45 @@ cleaned_dataset_dir="cleaned_datasets/"
 CLEANED_FILE_LIST=[]
 
 
-
-
-
 def parse_packet_file(input_filename, output_filename):
     with open(input_filename, 'r') as infile, open(output_filename, 'w') as outfile:
-        lines = infile.readlines()
-
-    
-        timestamp = None
         hex_data = ""
 
-        for line in lines:
+        for line in infile:
             line = line.strip()
 
             if line.startswith("+---------+"):
-                continue  # Skip the separator lines
+                continue
 
-            # If a line contains a timestamp
+            # new packet starts
             if "," in line and "ETHER" in line:
-                if timestamp and hex_data:             # this becomes true after the program has read both the lines
-                    # Clean up the hex data by removing spaces and '|'
+
+                # flush previous packet
+                if hex_data:
                     clean_hex = hex_data.replace("|", "").replace(" ", "").lower()
                     if clean_hex.startswith('0'):
                         clean_hex = clean_hex[1:]
-                        clean_hex = format_packet_hex(clean_hex)
-                    outfile.write(f"{clean_hex}\n")
+                    clean_hex = format_packet_hex(clean_hex)
+                    outfile.write(clean_hex + "\n")
 
-                # Reset for the next packet
-                timestamp = line.split()[0]
-                hex_data = ""              # the loop goes again and reads the next line, enters the else segment and grabs the hex
-            else:
-                # Grab the hex data 
-                hex_data += line
+                hex_data = ""   # reset
+                continue
 
-        # After the loop, ensure the last packet is saved
-        if timestamp and hex_data:
+            # accumulate hex lines only
+            hex_data += line
+
+        # flush final packet
+        if hex_data:
             clean_hex = hex_data.replace("|", "").replace(" ", "").lower()
-            clean_hex =format_packet_hex(clean_hex)
-            outfile.write(f"{clean_hex}\n")
+            if clean_hex.startswith('0'):
+                clean_hex = clean_hex[1:]
+            clean_hex = format_packet_hex(clean_hex)
+            outfile.write(clean_hex + "\n")
 
-def format_packet_hex(packet_hex, length=128):
+
+
+
+def format_packet_hex(packet_hex, length=goodneural.features):
     
     if len(packet_hex) > length:
         return packet_hex[:length]
@@ -75,7 +73,6 @@ def format_hex_data(hex_data):
 
 def main(file_list):
     file_list_len = len(file_list)
-    print("AAAAAAAAA ", file_list)
    
 
     if not os.path.exists(cleaned_dataset_dir):

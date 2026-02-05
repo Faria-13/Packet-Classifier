@@ -16,6 +16,7 @@ numpy_dir="numpy"
 cleaned_dir="cleaned_datasets"
 
 
+
 def num_rows(X_outfile):
     X_rows=0
     Y_rows=0
@@ -149,8 +150,6 @@ def preprocessor_main(features):
 
     print("NumPy preprocessing complete")
 
-
-#preprocessor_main(128)
 
 
 

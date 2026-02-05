@@ -17,6 +17,7 @@ from datetime import datetime
 import os.path
 
 ERROR = 1e-5
+features = 128
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
 
@@ -154,17 +155,17 @@ def optimizer_pick(choice,net_model,alpha):
 
 
 def main():
-    features = 128
-    iterations = 500  # At 401, the general accuracy is above 99.9%
-    alpha = 1e-6
+    
+    iterations = 100  # At 401, the general accuracy is above 99.9%
+    alpha = 1e-3
     hidden_nodes = 28
-    classes = 5  #only 4 for now 
+    classes = 5  
     batch_size = 128
     
 
    
-    X_train = torch.randn(1000, features)  # Example training data with 128 features
-    Y_labels = torch.randint(0, classes, (1000,))  # Example labels (0 to 3 for 4 classes)
+    X_train = torch.randn(4004, features)  # Example training data with 128 features
+    Y_labels = torch.randint(0, classes, (4004,))  # Example labels (0 to 3 for 4 classes)
    
 
     #testing datasets 
@@ -177,8 +178,8 @@ def main():
     if f.endswith("_features.npy")
     )
 
-    X_test_file_list = ["numpy/mixed_features.npy"]
-    Y_test_file_list = ["numpy/mixed_labels.npy"]
+    X_test_file_list = ["numpy/lucky_features.npy"]
+    Y_test_file_list = ["numpy/lucky_labels.npy"]
 
     # for feat in feature_files:
     #     base = feat.replace("_features.npy", "")

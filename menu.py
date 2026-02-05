@@ -96,7 +96,7 @@ def main():
 
             print("\nRunning statistics...\n")
             for cleaned_file in cleaner_tcpdump.CLEANED_FILE_LIST:
-                print("I am here trying to -----", cleaned_file)
+                
                 statmaker2.statmaker(cleaned_file)
 
         elif choice == '3':
