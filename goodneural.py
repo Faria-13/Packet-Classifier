@@ -15,9 +15,10 @@ import matplotlib.pyplot as plt
 #import matplotlib.image.AxesImage
 from datetime import datetime
 import os.path
+import numpy_populator
 
 ERROR = 1e-5
-features = 128
+
 
 def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_features, iterations, hidden_nodes, classes, alpha, batch_size):#, train_loader):
 
@@ -110,6 +111,7 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     print()
     print("Starting to test datasets.")
 
+    accuracy_rate_list = []
     for l in range(len(X_test_file_list)):
         X_test=X_test_file_list[l]
         Y_test=Y_test_file_list[l]
@@ -127,6 +129,9 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
 
         print("Shape of X_test:", X_test.shape)
         print("Shape of Y_test:", Y_test.shape)
+
+        print("Trying to see the labelsa for the test files")
+        print("first 20:", Y_test[:20])
         y_test_pred=net_model(X_test)
         
         predicted=torch.zeros(X_test.shape[0])
@@ -139,11 +144,14 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
         predicted_numpy=predicted.numpy()
 
         packet_choice(predicted_numpy)
-        accuracy(predicted_numpy, Y_test)
+        accuracy_rate = accuracy(predicted_numpy, Y_test)
+        accuracy_rate_list.append(accuracy_rate)
 
         #tcp_packet_list_list.append(tcp_packet_list)
+    
 
     #return tcp_packet_list_list
+    return accuracy_rate_list
 
 def optimizer_pick(choice,net_model,alpha):
 
@@ -154,52 +162,34 @@ def optimizer_pick(choice,net_model,alpha):
     return optimizer
 
 
-def main():
+def main(x_trainer_file, y_trainer_file, features):
     
-    iterations = 100  # At 401, the general accuracy is above 99.9%
+    iterations = 500  # At 401, the general accuracy is above 99.9%
     alpha = 1e-3
     hidden_nodes = 28
     classes = 5  
     batch_size = 128
     
 
-   
-    X_train = torch.randn(4004, features)  # Example training data with 128 features
-    Y_labels = torch.randint(0, classes, (4004,))  # Example labels (0 to 3 for 4 classes)
-   
 
-    #testing datasets 
-    #testing with everything that I trained on
+    #lets load the train
+    X_train = torch.from_numpy(
+    np.load(x_trainer_file).T
+    ).float()
 
-    NUMPY_DIR = "numpy"
+    Y_labels = torch.from_numpy(np.load(y_trainer_file)).long()
 
-    feature_files = sorted(
-    f for f in os.listdir(NUMPY_DIR)
-    if f.endswith("_features.npy")
-    )
 
-    X_test_file_list = ["numpy/lucky_features.npy"]
-    Y_test_file_list = ["numpy/lucky_labels.npy"]
-
-    # for feat in feature_files:
-    #     base = feat.replace("_features.npy", "")
-    #     label_file = f"{base}_labels.npy"
-
-    #     label_path = os.path.join(NUMPY_DIR, label_file)
-    #     feat_path = os.path.join(NUMPY_DIR, feat)
-
-    #     if not os.path.exists(label_path):
-    #         print(f"[!] Skipping {base}: label file missing")
-    #         continue
-
-    #     X_test_file_list.append(feat_path)
-    #     Y_test_file_list.append(label_path)
-
+    print("Shape check")
+    print(X_train.shape)
+    print(Y_labels.shape)
  
     # Call the function with these parameters
-    gen_net_mlp_main(X_train, Y_labels, X_test_file_list, Y_test_file_list,
-                    num_features=features, iterations=iterations, hidden_nodes=hidden_nodes, 
-                    classes=classes, alpha=alpha, batch_size=batch_size)
+    gen_net_mlp_main(X_train, Y_labels, numpy_populator.X_test_file_list,numpy_populator.Y_test_file_list, features,
+                                                          iterations, hidden_nodes, classes, alpha, batch_size )
 
 
-#main()
+    
+
+
+# main()

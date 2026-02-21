@@ -6,8 +6,8 @@ def packet_choice(predictions):
 
     packet_type = "No match"
     packet_ctr = 0
-    icmp_req_ctr, icmp_rep_ctr, arp_req_ctr, arp_rep_ctr = 0, 0, 0, 0
-    no_match_ctr = 0
+    icmp_ctr, tcp_ctr, arp_ctr, udp_ctr = 0, 0, 0, 0
+    stp_ctr = 0
 
     # # Ensure predictions are integers (class labels)
     # predictions = predictions.argmax(dim=1).cpu().numpy()
@@ -16,31 +16,31 @@ def packet_choice(predictions):
 
     for i in predictions:
         if i == 0:
-            packet_type = "ICMP Echo"
-            icmp_req_ctr += 1
+            packet_type = "ICMP"
+            icmp_ctr += 1
         elif i == 1:
-            packet_type = "ICMP Reply"
-            icmp_rep_ctr += 1
+            packet_type = "TCP"
+            tcp_ctr += 1
         elif i == 2:
-            packet_type = "ARP Request"
-            arp_req_ctr+=1
+            packet_type = "ARP"
+            arp_ctr+=1
         elif i == 3:
-            packet_type = "ARP Reply"
-            arp_rep_ctr +=1
-        else:
-            packet_type = "Other"
-            no_match_ctr += 1
+            packet_type = "UDP"
+            udp_ctr +=1
+        elif i == 4:
+            packet_type = "STP"
+            stp_ctr += 1
 
         packet_ctr += 1
 
     # Summary of packet classification
     print()
     print("Total packets :", packet_ctr)
-    print("0-ICMP req packets :", icmp_req_ctr)
-    print("1-ICMP rep packets:", icmp_rep_ctr)
-    print("2-ARP request packets :", arp_req_ctr)
-    print("3-Arp reply packets :", arp_rep_ctr)
-    print("Other packets :", no_match_ctr)
+    print("0-ICMP  packets :", icmp_ctr)
+    print("1-TCP  packets :", tcp_ctr)
+    print("2-ARP  packets :", arp_ctr)
+    print("3-UDP  packets :", udp_ctr)
+    print("4-STP  packets :", stp_ctr)
 
 
 
@@ -57,5 +57,9 @@ def accuracy(predictions, y_test):
 
     print("\nTotal Predictions:", total, "Accuracy Count:", accuracy_count)
     print("\nAccuracy of Predictions:", accuracy_count/total)
+
+    accuracy_rate = accuracy_count/total
+
+    return accuracy_rate
 
 

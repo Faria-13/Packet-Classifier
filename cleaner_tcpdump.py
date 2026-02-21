@@ -49,7 +49,7 @@ def parse_packet_file(input_filename, output_filename):
 
 
 
-def format_packet_hex(packet_hex, length=goodneural.features):
+def format_packet_hex(packet_hex, length=128):       #need to change this to be not hardcoded
     
     if len(packet_hex) > length:
         return packet_hex[:length]
@@ -86,7 +86,7 @@ def main(file_list):
 
         cleaned_file_name = cleaned_dataset_dir + file_name_only.split(".")[0] + "_cleaned.txt"
         
-        CLEANED_FILE_LIST.append(cleaned_file_name)
+        CLEANED_FILE_LIST.append(cleaned_file_name)   
 
         if not os.path.exists(cleaned_file_name):
         #make the clean file 

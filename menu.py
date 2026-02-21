@@ -57,7 +57,8 @@ def clear_directory(folder):
 
 
 def main():
-    CAPTURE_FILE_LIST = []
+    TEST_FILE_LIST = []
+    TRAINING_FILE_LIST = []
     clear_directory("cleaned_datasets")       #this clears the cleaned datasets folder every time you start the program
     print("\n\n🚀 Welcome to Faria's Packet Classifier Toolkit\n")
 
@@ -66,9 +67,11 @@ def main():
     while True:
 
         print("\nMenu:")
-        print("1. Select datasets")
-        print("2. Show packet statistics")
-        print("3. Train neural network (Windows)")
+        print("1. Select training dataset")
+        print("2. Select testing dataset")
+        print("3. Show packet statistics")
+        print("4. Train neural network (Windows)")
+        
         print("Q/q. Quit")
 
         choice = input("\nChoice: ").strip().lower()
@@ -76,21 +79,37 @@ def main():
 
         if choice == '1':
             files = list_dataset_files()
-            sel = input("\nSelect files (ex 1,3-5): ")
-            CAPTURE_FILE_LIST = parse_selection(sel, files)
+            sel = input("\nSelect a file: ")
+            TRAINING_FILE_LIST = parse_selection(sel, files)
 
-            print("\nSelected:")
-            for f in CAPTURE_FILE_LIST:
+            print("\nSelected training file:")
+            for f in TRAINING_FILE_LIST:
                 print("  ", f)
 
         elif choice == '2':
-            if  len(CAPTURE_FILE_LIST) == 0:
+            files = list_dataset_files()
+            sel = input("\nSelect test files (ex 1,3-5): ")
+            TEST_FILE_LIST = parse_selection(sel, files)
+            TEST_FILE_LIST = set(TEST_FILE_LIST)  # remove duplicates if any
+
+            print("\nSelected testing file:")
+            for f in list(TEST_FILE_LIST):
+                print("  ", f)
+
+        elif choice == '3':
+            print("Printing all the lists for debugging")
+            print("Test file list:", TEST_FILE_LIST)
+            print("Training file list:", TRAINING_FILE_LIST)
+
+            
+            combo_set = set(TRAINING_FILE_LIST + TEST_FILE_LIST)
+            if  len(combo_set) == 0:
                 print("Select datasets first (option 1)")
                 continue
             
             print("\nCleaning datasets...\n")
 
-            cleaner_tcpdump.main(CAPTURE_FILE_LIST)
+            cleaner_tcpdump.main(list(combo_set))
 
             print("\nDatasets cleaned...\n")
 
@@ -99,16 +118,17 @@ def main():
                 
                 statmaker2.statmaker(cleaned_file)
 
-        elif choice == '3':
-            if not CAPTURE_FILE_LIST:
-                print("⚠️ Select datasets first (option 1)")
+        elif choice == '4':
+            if not TEST_FILE_LIST and not TRAINING_FILE_LIST:
+                print("⚠️ Select both datasets first (option 1)")
                 continue
+            
+            combo_set = set(TRAINING_FILE_LIST + TEST_FILE_LIST)
+            cleaner_tcpdump.main(list(combo_set))
 
-            cleaner_tcpdump.main(CAPTURE_FILE_LIST)
+            numpy_populator.preprocessor_main(128, TRAINING_FILE_LIST)
 
-            numpy_populator.preprocessor_main(128)
-
-            goodneural.main()
+        
 
 
         elif choice == 'q':

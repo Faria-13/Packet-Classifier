@@ -1,20 +1,19 @@
-#This parser converts the packet to a single X feature vector based on user input.
-#6-28-19
-#This version runs like all of the others: using the first hex character through the
-#number of features requested.
-#This parser also uses packet_types.py along with the newer datasets based on 2500 packets
-#for each protocol/type for training. For ex. 2500 ARP messages 
 
-#from packet_types import *
 import numpy as np
 from datetime import datetime
 import time
 import os
+
+import torch
 import statmaker2
+import menu
+import goodneural
 
 numpy_dir="numpy"
 cleaned_dir="cleaned_datasets"
 
+X_test_file_list = []
+Y_test_file_list = []
 
 
 def num_rows(X_outfile):
@@ -107,7 +106,10 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
     return Y
     
 
-def preprocessor_main(features):
+def preprocessor_main(features, TRAINING_FILE_LIST):
+
+    X_trainer_file = None
+    Y_trainer_file = None
 
     os.makedirs(numpy_dir, exist_ok=True)
 
@@ -120,6 +122,7 @@ def preprocessor_main(features):
         if f.endswith("_cleaned.txt")
     )
 
+    train_base = os.path.splitext(os.path.basename(TRAINING_FILE_LIST[0]))[0]    
     for X_source_file in cleaned_files:
         base = os.path.splitext(os.path.basename(X_source_file))[0]
         base = base.replace("_cleaned", "")
@@ -147,8 +150,19 @@ def preprocessor_main(features):
 
         np.save(X_features_file, X_normalized)
         np.save(Y_labels_file, Y)
+        X_test_file_list.append(X_features_file)
+        Y_test_file_list.append(Y_labels_file)
+        if base == train_base:
+            print("MATCHHH training filies found")
+            X_trainer_file = X_features_file
+            Y_trainer_file = Y_labels_file
 
     print("NumPy preprocessing complete")
+
+
+    goodneural.main(X_trainer_file, Y_trainer_file, features)
+
+  
 
 
 
