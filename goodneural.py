@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os.path
 import numpy_populator
-import numpy_populator2
+
 
 ERROR = 1e-5
 

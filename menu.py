@@ -3,7 +3,7 @@ import cleaner_tcpdump
 import numpy_populator
 import goodneural
 import statmaker2   
-import numpy_populator2
+
 
 DATASET_DIR = "datasets"
 

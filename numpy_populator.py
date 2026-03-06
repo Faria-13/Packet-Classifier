@@ -8,8 +8,7 @@ import torch
 import statmaker2
 import menu
 import goodneural
-import goodneural2
-import goodneural3
+
 
 numpy_dir="numpy"
 cleaned_dir="cleaned_datasets"
