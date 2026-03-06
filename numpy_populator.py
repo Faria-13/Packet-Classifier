@@ -8,6 +8,8 @@ import torch
 import statmaker2
 import menu
 import goodneural
+import goodneural2
+import goodneural3
 
 numpy_dir="numpy"
 cleaned_dir="cleaned_datasets"
@@ -38,7 +40,7 @@ def numpy_X_Y(X_rows, X_cols, X_outfile, Y_rows, Y_cols):
             for j in range(X_cols):
                 
                 line = line.strip()
-                X[j][i]=int(line[j-1],16)  #This is a problem with odd nos. due to '/n'
+                X[j][i]=int(line[j],16)  #This is a problem with odd nos. due to '/n'
             i=i+1
     #X=X/16           #Normalizes X
     #print(X[:,0])
@@ -92,7 +94,8 @@ def fields_and_labels(X_outfile, Y, num_classes=4):
             traffic_class_int = 4
             stp_ctr += 1        
         else:
-            continue  # Skip unknown classes
+            traffic_class_int = 1  # Default to TCP if unknown
+            
 
 
         
@@ -141,14 +144,14 @@ def preprocessor_main(features, TRAINING_FILE_LIST):
         X_rows, Y_rows = num_rows(X_source_file)
 
         X, Y = numpy_X_Y(X_rows, X_cols, X_source_file, Y_rows, Y_cols)
-        X_normalized = mean_normalize(X, features)
+        # X_normalized = mean_normalize(X, features)  
         Y = fields_and_labels(X_source_file, Y)
 
         #so that the y labels match the length of predictions
         Y = Y.squeeze()   # (N,1) → (N,)
 
 
-        np.save(X_features_file, X_normalized)
+        np.save(X_features_file, X)
         np.save(Y_labels_file, Y)
         X_test_file_list.append(X_features_file)
         Y_test_file_list.append(Y_labels_file)
@@ -158,6 +161,8 @@ def preprocessor_main(features, TRAINING_FILE_LIST):
             Y_trainer_file = Y_labels_file
 
     print("NumPy preprocessing complete")
+
+
 
 
     goodneural.main(X_trainer_file, Y_trainer_file, features)

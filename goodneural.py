@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os.path
 import numpy_populator
+import numpy_populator2
 
 ERROR = 1e-5
 
@@ -32,22 +33,26 @@ def gen_net_mlp_main(X_train, Y_labels,X_test_file_list, Y_test_file_list, num_f
     D_out=classes 
     epochs=iterations
     alpha=alpha
-    max_iter=20
+
+
+      # BALANCED SAMPLING: This forces the model to see equal amounts of all classes
+    # # per batch, which stops the "always guess UDP" behavior.
+    # class_counts = torch.bincount(Y_labels)
+    # class_weights = 1. / (class_counts.float() + 1e-6)
+    # sample_weights = class_weights[Y_labels]
+    # sampler = data_utils.WeightedRandomSampler(weights=sample_weights, num_samples=len(sample_weights), replacement=True)
     train=data_utils.TensorDataset(X_train, Y_labels)
-    train_loader=data_utils.DataLoader(train, batch_size=batch_size,shuffle=False)
+    train_loader=data_utils.DataLoader(train, batch_size=batch_size, shuffle=True) #, sampler=sampler)
 
     
 
     net_model=torch.nn.Sequential(
     torch.nn.Linear(D_in, H1),
     torch.nn.ReLU(),
+    torch.nn.Dropout(0.2),
     torch.nn.Linear(H1,H2),
     torch.nn.ReLU(),
-
-    # torch.nn.Linear(H1,H2),
-    # torch.nn.ReLU(),
     torch.nn.Linear(H2, D_out),       
-    # torch.nn.Softmax(dim=1)
     )
     
     #

@@ -3,6 +3,7 @@ import cleaner_tcpdump
 import numpy_populator
 import goodneural
 import statmaker2   
+import numpy_populator2
 
 DATASET_DIR = "datasets"
 
@@ -123,8 +124,9 @@ def main():
                 print("⚠️ Select both datasets first (option 1)")
                 continue
             
-            combo_set = set(TRAINING_FILE_LIST + TEST_FILE_LIST)
-            cleaner_tcpdump.main(list(combo_set))
+            #combo_set = set(TRAINING_FILE_LIST + TEST_FILE_LIST)
+            combo_list = list(set(TRAINING_FILE_LIST) | set(TEST_FILE_LIST))
+            cleaner_tcpdump.main(combo_list)
 
             numpy_populator.preprocessor_main(128, TRAINING_FILE_LIST)
 

@@ -1,7 +1,6 @@
 import os
 import numpy_populator
-import statmaker
-# import statmaker
+
 import goodneural
 import menu
 
